@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.7.11'
 }
 
 group 'com.radsoltan'
@@ -9,7 +10,15 @@ repositories {
     mavenCentral()
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 dependencies {
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.7.11', ext: 'pom'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.7.11'
+    implementation 'com.what3words:w3w-java-wrapper:3.1.8'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }

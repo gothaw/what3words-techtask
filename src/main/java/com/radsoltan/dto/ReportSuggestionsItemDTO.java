@@ -1,11 +1,11 @@
 package com.radsoltan.dto;
 
-public class ReportSuggestionItemDTO {
+public class ReportSuggestionsItemDTO {
     private final String country;
     private final String nearestPlace;
     private final String words;
 
-    public ReportSuggestionItemDTO(String country, String nearestPlace, String words) {
+    public ReportSuggestionsItemDTO(String country, String nearestPlace, String words) {
         this.country = country;
         this.nearestPlace = nearestPlace;
         this.words = words;

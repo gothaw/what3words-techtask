@@ -2,9 +2,9 @@ package com.radsoltan.dto;
 
 import java.util.List;
 
-public class ReportSuggestionDTO {
+public class ReportSuggestionsDTO {
     private String message;
-    private List<ReportSuggestionItemDTO> suggestions;
+    private List<ReportSuggestionsItemDTO> suggestions;
 
     public String getMessage() {
         return message;
@@ -14,11 +14,11 @@ public class ReportSuggestionDTO {
         this.message = message;
     }
 
-    public List<ReportSuggestionItemDTO> getSuggestions() {
+    public List<ReportSuggestionsItemDTO> getSuggestions() {
         return suggestions;
     }
 
-    public void setSuggestions(List<ReportSuggestionItemDTO> suggestions) {
+    public void setSuggestions(List<ReportSuggestionsItemDTO> suggestions) {
         this.suggestions = suggestions;
     }
 }

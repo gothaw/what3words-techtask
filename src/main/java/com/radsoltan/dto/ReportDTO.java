@@ -2,9 +2,9 @@ package com.radsoltan.dto;
 
 public class ReportDTO {
     private final ReportInfoDTO info;
-    private final ReportSuggestionDTO suggestion;
+    private final ReportSuggestionsDTO suggestion;
 
-    public ReportDTO(ReportInfoDTO info, ReportSuggestionDTO suggestion) {
+    public ReportDTO(ReportInfoDTO info, ReportSuggestionsDTO suggestion) {
         this.info = info;
         this.suggestion = suggestion;
     }
@@ -13,7 +13,7 @@ public class ReportDTO {
         return info;
     }
 
-    public ReportSuggestionDTO getSuggestion() {
+    public ReportSuggestionsDTO getSuggestion() {
         return suggestion;
     }
 }

@@ -23,4 +23,11 @@ public class What3WordsApi {
                 .execute()
                 .getCoordinates();
     }
+
+    public static String getAddressBasedOnCoordinates(What3WordsV3 api, com.what3words.javawrapper.request.Coordinates coordinates, String language) {
+        return api.convertTo3wa(coordinates)
+                .language(language)
+                .execute()
+                .getWords();
+    }
 }

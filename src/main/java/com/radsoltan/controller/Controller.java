@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
     @RequestMapping(value = "/emergency-api/reports", method = RequestMethod.POST)
     public ResponseEntity<Object> getEmergencyReport() {
+        // Validate
 
         return ResponseEntity.ok("Ok");
     }

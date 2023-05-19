@@ -16,9 +16,17 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+/**
+ * Service used to handle emergency report submission (prefilling and checking the report) and converting 3wa address from one language to another.
+ */
 @Service
 public class What3WordsService {
 
+    /**
+     *
+     * @param info
+     * @return
+     */
     public ReportDTO validateAndFillEmergencyReport(ReportInfoDTO info) {
         ReportSuggestionDTO suggestions = new ReportSuggestionDTO();
         if (!Validation.isValidReportInfo(info)) {
@@ -36,7 +44,7 @@ public class What3WordsService {
                 Autosuggest autosuggest = What3WordsApi.getAutoSuggest(api, address, Constants.LANGUAGE_EN, Constants.COUNTRY_GB);
                 List<Suggestion> suggestionList = autosuggest.getSuggestions();
 
-                if (coordinates != null && What3WordsApi.isGbAddress(address, suggestionList)) {
+                if (coordinates != null && Validation.isGbAddress(address, suggestionList)) {
                     info.setLatitude(coordinates.getLat());
                     info.setLongitude(coordinates.getLng());
                 } else {

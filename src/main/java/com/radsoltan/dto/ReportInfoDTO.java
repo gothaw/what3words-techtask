@@ -2,6 +2,9 @@ package com.radsoltan.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Class contains data required for the report information.
+ */
 public class ReportInfoDTO {
     @JsonProperty("message")
     private String message;

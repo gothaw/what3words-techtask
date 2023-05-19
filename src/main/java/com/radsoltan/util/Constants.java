@@ -1,5 +1,8 @@
 package com.radsoltan.util;
 
+/**
+ * Interface with constants used in the API.
+ */
 public interface Constants {
     String MISSING_REPORT_INFO = "Provide report information either 3 word address or coordinates.";
     String THREE_WORD_ADDRESS_NOT_RECOGNIZED = "3wa not recognised: ";

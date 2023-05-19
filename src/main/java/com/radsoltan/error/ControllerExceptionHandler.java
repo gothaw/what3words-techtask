@@ -1,9 +1,6 @@
 package com.radsoltan.error;
 
-import com.radsoltan.exception.InvalidAddressFormatException;
-import com.radsoltan.exception.InvalidReportInformationException;
-import com.radsoltan.exception.MissingReportInfoException;
-import com.radsoltan.exception.LocationNotInUkException;
+import com.radsoltan.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -45,13 +42,13 @@ public class ControllerExceptionHandler {
      * Handles the exception when provided coordinates are not in the UK.
      *
      * @param exception NotUkCoordinatesException
-     * @return Bad request response with an error message
+     * @return Not found request response with an error message
      */
     @ExceptionHandler(LocationNotInUkException.class)
     public ResponseEntity<ErrorMessage> handleNotUkCoordinatesException(LocationNotInUkException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
     /**
@@ -62,6 +59,32 @@ public class ControllerExceptionHandler {
      */
     @ExceptionHandler(InvalidReportInformationException.class)
     public ResponseEntity<ErrorMessage> handleInvalidReportInformationException(InvalidReportInformationException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    /**
+     * Handles the exception when converting one 3wa to another and the provided 3wa is not recognized.
+     *
+     * @param exception AddressNotRecognizedException
+     * @return Not found request response with an error message
+     */
+    @ExceptionHandler(AddressNotRecognizedException.class)
+    public ResponseEntity<ErrorMessage> handleAddressNotRecognizedException(AddressNotRecognizedException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+    }
+
+    /**
+     * Handles the exception when converting one w3a to another and no w3a was provided.
+     *
+     * @param exception MissingAddressInfoException
+     * @return Bad request response with an error message
+     */
+    @ExceptionHandler(MissingAddressInfoException.class)
+    public ResponseEntity<ErrorMessage> handleMissingAddressInfoException(MissingAddressInfoException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);

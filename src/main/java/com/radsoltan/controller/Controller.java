@@ -40,22 +40,24 @@ public class Controller {
 
     /**
      * The endpoint that handles POST request for retrieving a Welsh 3 word address based on an English one.
+     *
      * @return Response with 3wa in Welsh
      */
     @RequestMapping(value = "/emergencyapi/welsh-convert", method = RequestMethod.POST)
     public ResponseEntity<Object> getWelshThreeWordAddress(@RequestBody AddressDTO request) {
-        AddressDTO address = what3WordsService.getTheeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_WELSH);
+        AddressDTO address = what3WordsService.getThreeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_WELSH);
 
         return ResponseEntity.ok(address);
     }
 
     /**
      * The endpoint that handles POST request for retrieving an English 3 word address based on a Welsh one.
+     *
      * @return Response with 3wa in English
      */
     @RequestMapping(value = "/emergencyapi/welsh-3wa", method = RequestMethod.POST)
     public ResponseEntity<Object> getEnglishThreeWordAddress(@RequestBody AddressDTO request) {
-        AddressDTO address = what3WordsService.getTheeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_EN);
+        AddressDTO address = what3WordsService.getThreeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_EN);
 
         return ResponseEntity.ok(address);
     }

@@ -4,10 +4,7 @@ import com.radsoltan.dto.AddressDTO;
 import com.radsoltan.dto.ReportDTO;
 import com.radsoltan.dto.ReportInfoDTO;
 import com.radsoltan.dto.ReportSuggestionDTO;
-import com.radsoltan.exception.InvalidAddressFormatException;
-import com.radsoltan.exception.InvalidReportInformationException;
-import com.radsoltan.exception.MissingReportInfoException;
-import com.radsoltan.exception.LocationNotInUkException;
+import com.radsoltan.exception.*;
 import com.radsoltan.util.Constants;
 import com.radsoltan.util.Validation;
 import com.radsoltan.util.What3WordsApi;
@@ -90,13 +87,16 @@ public class What3WordsService {
     }
 
     /**
+     * The method that converts provided 3wa to a 3wa in a specified language.
+     * Firstly it converts to coordinates then based on these coordinates it finds a new 3wa.
+     * It uses Java wrapper for the API calls.
      *
-     * @param
-     * @return
+     * @param language defines what language should the 3wa be converted to
+     * @return addressDTO object with a 3wa in a specified language
      */
-    public AddressDTO getTheeWordAddressForProvidedLanguage(AddressDTO addressDTO, String language) {
-        if (addressDTO == null) {
-            throw new RuntimeException("Three word address must not be null.");
+    public AddressDTO getThreeWordAddressForProvidedLanguage(AddressDTO addressDTO, String language) {
+        if (addressDTO == null || addressDTO.getThreeWordAddress() == null) {
+            throw new MissingAddressInfoException();
         }
         String address = addressDTO.getThreeWordAddress();
         What3WordsV3 api = What3WordsApi.getInstance();
@@ -106,7 +106,7 @@ public class What3WordsService {
         ConvertToCoordinates coordinatesResponse = What3WordsApi.getCoordinatesBasedOnThreeWordAddress(api, address);
         Coordinates coordinates = coordinatesResponse.getCoordinates();
         if (coordinates == null) {
-            throw new RuntimeException("3wa not recognized");
+            throw new AddressNotRecognizedException(address);
         }
         if (!coordinatesResponse.getCountry().equals(Constants.COUNTRY_GB)) {
             throw new LocationNotInUkException();

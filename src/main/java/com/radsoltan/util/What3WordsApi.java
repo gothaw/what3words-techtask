@@ -7,7 +7,6 @@ import com.what3words.javawrapper.request.AutosuggestRequest;
 import com.what3words.javawrapper.response.Autosuggest;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import com.what3words.javawrapper.response.ConvertToCoordinates;
-import com.what3words.javawrapper.response.Coordinates;
 import org.springframework.util.StringUtils;
 
 /**

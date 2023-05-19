@@ -46,14 +46,11 @@ public class ApiWrapper {
      * @return AutoSuggest object that includes 3 word address suggestions
      */
     public static Autosuggest getAutoSuggest(What3WordsV3 api, String address, String language, String country) {
-        AutosuggestRequest.Builder builder = api.autosuggest(address)
+        return api.autosuggest(address)
                 .inputType(AutosuggestInputType.GENERIC_VOICE)
-                .language(language);
-        if (StringUtils.hasText(country)) {
-            return builder.clipToCountry(country).execute();
-        } else {
-            return builder.execute();
-        }
+                .language(language)
+                .clipToCountry(country)
+                .execute();
     }
 
     /**

@@ -1,10 +1,12 @@
 package com.radsoltan.dto;
 
+import com.what3words.javawrapper.response.Suggestion;
+
 import java.util.List;
 
-public class ReportSuggestionsDTO {
+public class ReportSuggestionDTO {
     private String message;
-    private List<ReportSuggestionsItemDTO> suggestions;
+    private List<Suggestion> suggestions;
 
     public String getMessage() {
         return message;
@@ -14,11 +16,11 @@ public class ReportSuggestionsDTO {
         this.message = message;
     }
 
-    public List<ReportSuggestionsItemDTO> getSuggestions() {
+    public List<Suggestion> getSuggestions() {
         return suggestions;
     }
 
-    public void setSuggestions(List<ReportSuggestionsItemDTO> suggestions) {
+    public void setSuggestions(List<Suggestion> suggestions) {
         this.suggestions = suggestions;
     }
 }

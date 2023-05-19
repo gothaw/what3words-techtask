@@ -3,6 +3,7 @@ package com.radsoltan.controller;
 import com.radsoltan.dto.ReportDTO;
 import com.radsoltan.dto.ReportInfoDTO;
 import com.radsoltan.service.What3WordsService;
+import com.radsoltan.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +19,11 @@ public class Controller {
     @RequestMapping(value = "/emergency-api/reports", method = RequestMethod.POST)
     public ResponseEntity<Object> getEmergencyReport(@RequestBody ReportInfoDTO request) {
         ReportDTO report = what3WordsService.validateAndFillEmergencyReport(request);
+        ReportInfoDTO info = report.info();
 
-        return ResponseEntity.ok(report.getInfo());
+        return (Validation.isReportInfoComplete(info))
+                ? ResponseEntity.ok(report.info())
+                : ResponseEntity.ok(report.suggestion());
     }
 
     @RequestMapping(value = "/emergency-api/welsh-convert", method = RequestMethod.POST)

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * RESTful controller. Handles incoming HTTP requests.
+ * It includes endpoints for handling emergency report submission and converting English 3wa to Welsh one and vice versa.
  */
 @RestController
 public class Controller {
@@ -25,7 +26,7 @@ public class Controller {
      * The endpoint that handles POST requests for submitting emergency reports.
      * It invokes method from {@code what3WordsService} that check and fill in the missing fields in the emergency report.
      *
-     * @param request incomplete report information included in the request
+     * @param request potentially incomplete report information included in the request
      * @return Response with filled emergency report or suggestions if 3wa was not recognized
      */
     @RequestMapping(value = "/emergencyapi/reports", method = RequestMethod.POST)

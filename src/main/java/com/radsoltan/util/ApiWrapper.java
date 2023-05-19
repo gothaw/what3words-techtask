@@ -3,16 +3,14 @@ package com.radsoltan.util;
 import com.radsoltan.config.Config;
 import com.what3words.javawrapper.What3WordsV3;
 import com.what3words.javawrapper.request.AutosuggestInputType;
-import com.what3words.javawrapper.request.AutosuggestRequest;
 import com.what3words.javawrapper.response.Autosuggest;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import com.what3words.javawrapper.response.ConvertToCoordinates;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 /**
- * Class includes a singleton pattern for What3Words API wrapper creation.
- * It also includes a number of methods that interact with the API.
+ * Class includes a singleton pattern for What3Words API wrapper creation. It uses Java wrapper.
+ * It also includes a number of methods to interact with the API.
  * See: https://developer.what3words.com/tutorial/java
  */
 @Component

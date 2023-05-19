@@ -38,6 +38,7 @@ public class What3WordsService {
      *   - If 3wa was provided in the request, and it doesn't match 3wa from the response, it throws and exception.
      *   - Otherwise, if 3wa address from the response is not in the UK, it throws an exception.
      *   - Otherwise, it adds 3wa from the response to the report.
+     *  It uses API wrapper for the API calls.
      *
      * @param info report information object
      * @return filled and checked emergency report along with 3wa suggestions (if applicable)
@@ -94,7 +95,7 @@ public class What3WordsService {
     /**
      * The method that converts provided 3wa to a 3wa in a specified language.
      * Firstly it converts to coordinates then based on these coordinates it finds a new 3wa.
-     * It uses Java wrapper for the API calls.
+     * It uses API wrapper for the API calls.
      *
      * @param language defines what language should the 3wa be converted to
      * @return addressDTO object with a 3wa in a specified language

@@ -22,7 +22,7 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUnableToRetrieveDataException(MissingReportInfoException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorMessage);
     }
 
     /**
@@ -35,7 +35,7 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUnableToRetrieveDataException(InvalidAddressFormatException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorMessage);
     }
 
     /**
@@ -87,6 +87,6 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ErrorMessage> handleMissingAddressInfoException(MissingAddressInfoException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorMessage);
     }
 }

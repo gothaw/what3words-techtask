@@ -3,6 +3,9 @@ package com.radsoltan.service;
 import com.radsoltan.dto.ReportDTO;
 import com.radsoltan.dto.ReportInfoDTO;
 import com.radsoltan.dto.ReportSuggestionDTO;
+import com.radsoltan.exception.InvalidAddressFormatException;
+import com.radsoltan.exception.InvalidReportInformationException;
+import com.radsoltan.exception.LocationNotInUkException;
 import com.radsoltan.exception.MissingReportInfoException;
 import com.radsoltan.util.Constants;
 import com.radsoltan.util.ApiWrapper;
@@ -76,7 +79,7 @@ class What3WordsServiceTest {
         info.setReportingOfficerName("Chuck Norris");
         String expectedAddress = "daring.lion.racer";
 
-        mockApiCallForRequestsWithCoordinates(expectedAddress, Constants.LANGUAGE_EN);
+        mockApiCallForRequestsWithCoordinates(expectedAddress, Constants.LANGUAGE_EN, Constants.COUNTRY_GB);
 
         ReportDTO report = service.validateAndFillEmergencyReport(info);
         ReportInfoDTO actualInfo = report.info();
@@ -112,16 +115,53 @@ class What3WordsServiceTest {
 
     @Test
     void shouldThrowAnExceptionIfReportInformationIsMissing() {
-        ReportInfoDTO reportInfoDTO = new ReportInfoDTO();
+        ReportInfoDTO info = new ReportInfoDTO();
 
-        assertThrows(MissingReportInfoException.class, () -> {
-            service.validateAndFillEmergencyReport(reportInfoDTO);
-        });
+        assertThrows(MissingReportInfoException.class, () -> service.validateAndFillEmergencyReport(info));
     }
 
     @Test
     void shouldThrowAnExceptionIfAddressIsInWrongFormat() {
+        String address = "xxx";
+        ReportInfoDTO info = new ReportInfoDTO();
+        info.setThreeWordAddress(address);
 
+        assertThrows(InvalidAddressFormatException.class, () -> service.validateAndFillEmergencyReport(info));
+    }
+
+    @Test
+    void shouldThrowAnExceptionIf3WaAddressDoesNotCorrespondToCoordinates() {
+        Double longitude = -0.125499;
+        Double latitude = 51.508341;
+
+        ReportInfoDTO info = new ReportInfoDTO();
+        info.setLongitude(longitude);
+        info.setLatitude(latitude);
+        info.setThreeWordAddress("hello.world.today");
+        info.setMessage("A climber has got lost");
+        info.setReportingOfficerName("Chuck Norris");
+        String expectedAddress = "daring.lion.racer";
+
+        mockApiCallForRequestsWithCoordinates(expectedAddress, Constants.LANGUAGE_EN, Constants.COUNTRY_GB);
+
+        assertThrows(InvalidReportInformationException.class, () -> service.validateAndFillEmergencyReport(info));
+    }
+
+    @Test
+    void shouldThrowAnExceptionIfProvidedCoordinatesAreNotInUK() {
+        Double longitude = -25.125499;
+        Double latitude = 51.508341;
+
+        ReportInfoDTO info = new ReportInfoDTO();
+        info.setLongitude(longitude);
+        info.setLatitude(latitude);
+        info.setMessage("A climber has got lost");
+        info.setReportingOfficerName("Chuck Norris");
+        String expectedAddress = "daring.lion.racer";
+
+        mockApiCallForRequestsWithCoordinates(expectedAddress, Constants.LANGUAGE_EN, "US");
+
+        assertThrows(LocationNotInUkException.class, () -> service.validateAndFillEmergencyReport(info));
     }
 
     private void mockApiCallsForRequestWithThreeWordAddress(String address, Double expectedLatitude, Double expectedLongitude, Coordinates coordinates) {
@@ -138,12 +178,12 @@ class What3WordsServiceTest {
         Mockito.when(api.convertToCoordinates(address)).thenReturn(builder);
     }
 
-    private void mockApiCallForRequestsWithCoordinates(String expected3wa, String language) {
+    private void mockApiCallForRequestsWithCoordinates(String expected3wa, String language, String country) {
         ConvertTo3WARequest.Builder builder = Mockito.mock(ConvertTo3WARequest.Builder.class);
         ConvertTo3WA mockConvert = Mockito.mock(ConvertTo3WA.class);
 
         Mockito.when(mockConvert.getWords()).thenReturn(expected3wa);
-        Mockito.when(mockConvert.getCountry()).thenReturn(Constants.COUNTRY_GB);
+        Mockito.when(mockConvert.getCountry()).thenReturn(country);
         Mockito.when(builder.execute()).thenReturn(mockConvert);
         Mockito.when(builder.language(Mockito.eq(language))).thenReturn(builder);
         Mockito.when(api.convertTo3wa(Mockito.any(com.what3words.javawrapper.request.Coordinates.class))).thenReturn(builder);

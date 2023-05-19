@@ -1,5 +1,6 @@
 package com.radsoltan.controller;
 
+import com.radsoltan.dto.AddressDTO;
 import com.radsoltan.dto.ReportDTO;
 import com.radsoltan.dto.ReportInfoDTO;
 import com.radsoltan.service.What3WordsService;
@@ -24,9 +25,9 @@ public class Controller {
      * It invokes method from {@code what3WordsService} that check and fill in the missing fields in the emergency report.
      *
      * @param request incomplete report information included in the request
-     * @return filled emergency report or suggestions if 3wa was not recognized
+     * @return Response with filled emergency report or suggestions if 3wa was not recognized
      */
-    @RequestMapping(value = "/emergency-api/reports", method = RequestMethod.POST)
+    @RequestMapping(value = "/emergencyapi/reports", method = RequestMethod.POST)
     public ResponseEntity<Object> getEmergencyReport(@RequestBody ReportInfoDTO request) {
         ReportDTO report = what3WordsService.validateAndFillEmergencyReport(request);
         ReportInfoDTO info = report.info();
@@ -37,12 +38,23 @@ public class Controller {
     }
 
     /**
-     * // TODO: 19/05/2023 Implement
-     * @return
+     * The endpoint that handles POST request for retrieving a Welsh 3 word address based on an English one.
+     * @return Response with 3wa in Welsh
      */
-    @RequestMapping(value = "/emergency-api/welsh-convert", method = RequestMethod.POST)
-    public ResponseEntity<Object> getWelsh3WaLocation() {
+    @RequestMapping(value = "/emergencyapi/welsh-convert", method = RequestMethod.POST)
+    public ResponseEntity<Object> getWelsh3WaLocation(@RequestBody AddressDTO request) {
+        AddressDTO welshAddress = what3WordsService.getWelshThreeWordAddressFromEnglish(request);
 
+        return ResponseEntity.ok(welshAddress);
+    }
+
+    /**
+     * The endpoint that handles POST request for retrieving an English 3 word address based on a Welsh one.
+     * @return Response with 3wa in English
+     */
+    @RequestMapping(value = "/emergencyapi/welsh-3wa", method = RequestMethod.POST)
+    public ResponseEntity<Object> getWelshThreeWordAddressFromEnglish() {
+        // TODO: 19/05/2023 Implement
         return ResponseEntity.ok("Ok");
     }
 }

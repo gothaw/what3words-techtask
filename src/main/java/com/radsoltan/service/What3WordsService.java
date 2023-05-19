@@ -1,8 +1,10 @@
 package com.radsoltan.service;
 
+import com.radsoltan.dto.AddressDTO;
 import com.radsoltan.dto.ReportDTO;
 import com.radsoltan.dto.ReportInfoDTO;
 import com.radsoltan.dto.ReportSuggestionDTO;
+import com.radsoltan.exception.InvalidAddressFormatException;
 import com.radsoltan.exception.InvalidReportInformationException;
 import com.radsoltan.exception.MissingReportInfoException;
 import com.radsoltan.exception.NotUkCoordinatesException;
@@ -12,12 +14,11 @@ import com.radsoltan.util.What3WordsApi;
 import com.what3words.javawrapper.What3WordsV3;
 import com.what3words.javawrapper.response.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 /**
- * Service used to handle emergency report submission (prefilling and checking the report) and converting 3wa address from one language to another.
+ * Service used to handle emergency report submission (prefilling and checking the report) and converting 3wa address from one English to Welsh and vice versa.
  */
 @Service
 public class What3WordsService {
@@ -26,12 +27,12 @@ public class What3WordsService {
      * The method checks and fills emergency report. It uses following rules:
      * 1. It checks if either valid 3wa or a set of coordinates were provided
      *   - If none were provided it throws an exception.
-     *   - It also validates if provided 3wa is in valid format
-     * 2. If a complete set of coordinates was NOT provided
+     * 2. If 3wa was provided it checks if it's in valid format. If not it throws an exception
+     * 3. If a complete set of coordinates was NOT provided
      *   - It gets coordinates from the API
      *   - If coordinates for that 3wa address exist and are in the UK it adds them to the report
      *   - Otherwise, it prepares a list of suggestions based on 3wa provided
-     * 3. Otherwise, if coordinates were provided:
+     * 4. Otherwise, if coordinates were provided:
      *   - It gets 3wa based on coordinates
      *   - If 3wa was provided in the request, and it doesn't match 3wa from the response, it throws and exception.
      *   - Otherwise, if 3wa address from the response is not in the UK, it throws an exception.
@@ -50,6 +51,10 @@ public class What3WordsService {
         Double latitude = info.getLatitude();
         Double longitude = info.getLongitude();
         String address = info.getThreeWordAddress();
+
+        if (address != null && !Validation.validateThreeWordAddress(address)) {
+            throw new InvalidAddressFormatException();
+        }
 
         if (latitude == null || longitude == null) {
             // Get coordinates based on 3 word address
@@ -82,5 +87,19 @@ public class What3WordsService {
         }
 
         return new ReportDTO(info, suggestions);
+    }
+
+    /**
+     *
+     * @param
+     * @return
+     */
+    public AddressDTO getWelshThreeWordAddressFromEnglish(AddressDTO englishAddressDTO) {
+        if (englishAddressDTO == null) {
+            throw new RuntimeException("Three word address must not be null.");
+        }
+        String address = englishAddressDTO.getThreeWordAddress();
+
+        return null;
     }
 }

@@ -1,10 +1,8 @@
 package com.radsoltan.util;
 
 import com.radsoltan.dto.ReportInfoDTO;
-import com.radsoltan.exception.InvalidAddressFormatException;
-import com.what3words.javawrapper.response.Suggestion;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,22 +17,13 @@ public class Validation {
      * See: https://developer.what3words.com/tutorial/detecting-if-text-is-in-the-format-of-a-3-word-address
      *
      * @param address address to be checked
-     * @throws InvalidAddressFormatException if {@code address} doesn't match the 3wa format
      * @return true if {@code address} matches the format
      */
-    private static boolean validateThreeWordAddress(String address) {
-        if (address == null) {
-            return false;
-        }
-
+    public static boolean validateThreeWordAddress(String address) {
         Pattern pattern = Pattern.compile(THREE_WORD_ADDRESS_REGEX);
         Matcher matcher = pattern.matcher(address);
 
-        if (!matcher.find()) {
-            throw new InvalidAddressFormatException();
-        } else {
-            return true;
-        }
+        return matcher.find();
     }
 
     /**
@@ -44,7 +33,7 @@ public class Validation {
      * @return true if either coordinates or 3wa address is provided
      */
     public static boolean isValidReportInfo(ReportInfoDTO reportInfo) {
-        return (reportInfo.getLatitude() != null && reportInfo.getLongitude() != null) || validateThreeWordAddress(reportInfo.getThreeWordAddress());
+        return (reportInfo.getLatitude() != null && reportInfo.getLongitude() != null) || StringUtils.hasText(reportInfo.getThreeWordAddress());
     }
 
     /**

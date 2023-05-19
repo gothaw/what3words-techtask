@@ -7,19 +7,15 @@ import com.radsoltan.dto.ReportSuggestionDTO;
 import com.radsoltan.service.What3WordsService;
 import com.radsoltan.util.Constants;
 import com.what3words.javawrapper.response.Suggestion;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +27,7 @@ class ControllerTest {
     Controller controller;
 
     @BeforeEach
-    void beforeAll() {
+    void beforeEach() {
         MockitoAnnotations.initMocks(this);
     }
 

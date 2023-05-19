@@ -7,9 +7,10 @@ import com.radsoltan.dto.ReportSuggestionDTO;
 import com.radsoltan.exception.*;
 import com.radsoltan.util.Constants;
 import com.radsoltan.util.Validation;
-import com.radsoltan.util.What3WordsApi;
+import com.radsoltan.util.ApiWrapper;
 import com.what3words.javawrapper.What3WordsV3;
 import com.what3words.javawrapper.response.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,9 @@ import java.util.List;
  */
 @Service
 public class What3WordsService {
+
+    @Autowired
+    ApiWrapper apiWrapper;
 
     /**
      * The method checks and fills emergency report. It uses following rules:
@@ -43,8 +47,8 @@ public class What3WordsService {
             throw new MissingReportInfoException();
         }
 
-        ReportSuggestionDTO suggestions = new ReportSuggestionDTO();
-        What3WordsV3 api = What3WordsApi.getInstance();
+        ReportSuggestionDTO suggestion = new ReportSuggestionDTO();
+        What3WordsV3 api = apiWrapper.getInstance();
         Double latitude = info.getLatitude();
         Double longitude = info.getLongitude();
         String address = info.getThreeWordAddress();
@@ -55,23 +59,24 @@ public class What3WordsService {
 
         if (latitude == null || longitude == null) {
             // Get coordinates based on 3 word address
-            ConvertToCoordinates response = What3WordsApi.getCoordinatesBasedOnThreeWordAddress(api, address);
+            ConvertToCoordinates response = ApiWrapper.getCoordinatesBasedOnThreeWordAddress(api, address);
             Coordinates coordinates = response.getCoordinates();
-            // Get suggestions
-            Autosuggest autosuggest = What3WordsApi.getAutoSuggest(api, address, Constants.LANGUAGE_EN, Constants.COUNTRY_GB);
-            List<Suggestion> suggestionList = autosuggest.getSuggestions();
 
             if (coordinates != null && response.getCountry().equals(Constants.COUNTRY_GB)) {
                 info.setLatitude(coordinates.getLat());
                 info.setLongitude(coordinates.getLng());
             } else {
-                suggestions.setMessage(Constants.THREE_WORD_ADDRESS_NOT_RECOGNIZED + address);
-                suggestions.setSuggestions(suggestionList);
+                // Get suggestions
+                Autosuggest autosuggest = ApiWrapper.getAutoSuggest(api, address, Constants.LANGUAGE_EN, Constants.COUNTRY_GB);
+                List<Suggestion> suggestionList = autosuggest.getSuggestions();
+
+                suggestion.setMessage(Constants.THREE_WORD_ADDRESS_NOT_RECOGNIZED + address);
+                suggestion.setSuggestions(suggestionList);
             }
         } else {
             // Get 3 word address based on coordinates
             com.what3words.javawrapper.request.Coordinates coordinates = new com.what3words.javawrapper.request.Coordinates(latitude, longitude);
-            ConvertTo3WA response = What3WordsApi.getThreeWordAddressBasedOnCoordinates(api, coordinates, Constants.LANGUAGE_EN);
+            ConvertTo3WA response = ApiWrapper.getThreeWordAddressBasedOnCoordinates(api, coordinates, Constants.LANGUAGE_EN);
             String responseAddress = response.getWords();
             if (address != null && !address.equals(responseAddress)) {
                 // Check if provided 3wa matches with the one from the response
@@ -83,7 +88,7 @@ public class What3WordsService {
             }
         }
 
-        return new ReportDTO(info, suggestions);
+        return new ReportDTO(info, suggestion);
     }
 
     /**
@@ -99,11 +104,11 @@ public class What3WordsService {
             throw new MissingAddressInfoException();
         }
         String address = addressDTO.getThreeWordAddress();
-        What3WordsV3 api = What3WordsApi.getInstance();
+        What3WordsV3 api = apiWrapper.getInstance();
         if (!Validation.validateThreeWordAddress(address)) {
             throw new InvalidAddressFormatException();
         }
-        ConvertToCoordinates coordinatesResponse = What3WordsApi.getCoordinatesBasedOnThreeWordAddress(api, address);
+        ConvertToCoordinates coordinatesResponse = ApiWrapper.getCoordinatesBasedOnThreeWordAddress(api, address);
         Coordinates coordinates = coordinatesResponse.getCoordinates();
         if (coordinates == null) {
             throw new AddressNotRecognizedException(address);
@@ -112,7 +117,7 @@ public class What3WordsService {
             throw new LocationNotInUkException();
         }
         com.what3words.javawrapper.request.Coordinates requestCoordinates = new com.what3words.javawrapper.request.Coordinates(coordinates.getLat(), coordinates.getLng());
-        ConvertTo3WA response3WA = What3WordsApi.getThreeWordAddressBasedOnCoordinates(api, requestCoordinates, language);
+        ConvertTo3WA response3WA = ApiWrapper.getThreeWordAddressBasedOnCoordinates(api, requestCoordinates, language);
         addressDTO.setThreeWordAddress(response3WA.getWords());
 
         return addressDTO;

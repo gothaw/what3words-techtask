@@ -7,6 +7,7 @@ import com.what3words.javawrapper.request.AutosuggestRequest;
 import com.what3words.javawrapper.response.Autosuggest;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import com.what3words.javawrapper.response.ConvertToCoordinates;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
@@ -14,11 +15,12 @@ import org.springframework.util.StringUtils;
  * It also includes a number of methods that interact with the API.
  * See: https://developer.what3words.com/tutorial/java
  */
-public class What3WordsApi {
+@Component
+public class ApiWrapper {
     private static What3WordsV3 instance;
 
     // Preventing instantiation
-    private What3WordsApi() {
+    private ApiWrapper() {
     }
 
     /**
@@ -26,24 +28,12 @@ public class What3WordsApi {
      *
      * @return instance of the wrapper
      */
-    public static What3WordsV3 getInstance() {
+    public What3WordsV3 getInstance() {
         if (instance == null) {
             instance = new What3WordsV3(Config.API_KEY);
         }
 
         return instance;
-    }
-
-    /**
-     * Gets auto suggestions based on the 3 word address and language provided.
-     *
-     * @param api      Java wrapper of What3Words API
-     * @param address  3wa address
-     * @param language string representing language
-     * @return AutoSuggest object that includes 3 word address suggestions
-     */
-    public static Autosuggest getAutoSuggest(What3WordsV3 api, String address, String language) {
-        return What3WordsApi.getAutoSuggest(api, address, language, "");
     }
 
     /**

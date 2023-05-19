@@ -94,7 +94,7 @@ public class What3WordsService {
      * @param language defines what language should the 3wa be converted to
      * @return addressDTO object with a 3wa in a specified language
      */
-    public AddressDTO getThreeWordAddressForProvidedLanguage(AddressDTO addressDTO, String language) {
+    public AddressDTO convertThreeWordAddressToProvidedLanguage(AddressDTO addressDTO, String language) {
         if (addressDTO == null || addressDTO.getThreeWordAddress() == null) {
             throw new MissingAddressInfoException();
         }

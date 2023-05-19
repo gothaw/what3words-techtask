@@ -45,7 +45,7 @@ public class Controller {
      */
     @RequestMapping(value = "/emergencyapi/welsh-convert", method = RequestMethod.POST)
     public ResponseEntity<Object> getWelshThreeWordAddress(@RequestBody AddressDTO request) {
-        AddressDTO address = what3WordsService.getThreeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_WELSH);
+        AddressDTO address = what3WordsService.convertThreeWordAddressToProvidedLanguage(request, Constants.LANGUAGE_WELSH);
 
         return ResponseEntity.ok(address);
     }
@@ -57,7 +57,7 @@ public class Controller {
      */
     @RequestMapping(value = "/emergencyapi/welsh-3wa", method = RequestMethod.POST)
     public ResponseEntity<Object> getEnglishThreeWordAddress(@RequestBody AddressDTO request) {
-        AddressDTO address = what3WordsService.getThreeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_EN);
+        AddressDTO address = what3WordsService.convertThreeWordAddressToProvidedLanguage(request, Constants.LANGUAGE_EN);
 
         return ResponseEntity.ok(address);
     }

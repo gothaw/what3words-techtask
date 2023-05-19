@@ -4,6 +4,7 @@ import com.radsoltan.dto.AddressDTO;
 import com.radsoltan.dto.ReportDTO;
 import com.radsoltan.dto.ReportInfoDTO;
 import com.radsoltan.service.What3WordsService;
+import com.radsoltan.util.Constants;
 import com.radsoltan.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +43,10 @@ public class Controller {
      * @return Response with 3wa in Welsh
      */
     @RequestMapping(value = "/emergencyapi/welsh-convert", method = RequestMethod.POST)
-    public ResponseEntity<Object> getWelsh3WaLocation(@RequestBody AddressDTO request) {
-        AddressDTO welshAddress = what3WordsService.getWelshThreeWordAddressFromEnglish(request);
+    public ResponseEntity<Object> getWelshThreeWordAddress(@RequestBody AddressDTO request) {
+        AddressDTO address = what3WordsService.getTheeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_WELSH);
 
-        return ResponseEntity.ok(welshAddress);
+        return ResponseEntity.ok(address);
     }
 
     /**
@@ -53,8 +54,9 @@ public class Controller {
      * @return Response with 3wa in English
      */
     @RequestMapping(value = "/emergencyapi/welsh-3wa", method = RequestMethod.POST)
-    public ResponseEntity<Object> getWelshThreeWordAddressFromEnglish() {
-        // TODO: 19/05/2023 Implement
-        return ResponseEntity.ok("Ok");
+    public ResponseEntity<Object> getEnglishThreeWordAddress(@RequestBody AddressDTO request) {
+        AddressDTO address = what3WordsService.getTheeWordAddressForProvidedLanguage(request, Constants.LANGUAGE_EN);
+
+        return ResponseEntity.ok(address);
     }
 }

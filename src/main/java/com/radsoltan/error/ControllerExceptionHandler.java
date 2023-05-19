@@ -3,7 +3,7 @@ package com.radsoltan.error;
 import com.radsoltan.exception.InvalidAddressFormatException;
 import com.radsoltan.exception.InvalidReportInformationException;
 import com.radsoltan.exception.MissingReportInfoException;
-import com.radsoltan.exception.NotUkCoordinatesException;
+import com.radsoltan.exception.LocationNotInUkException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,8 +47,8 @@ public class ControllerExceptionHandler {
      * @param exception NotUkCoordinatesException
      * @return Bad request response with an error message
      */
-    @ExceptionHandler(NotUkCoordinatesException.class)
-    public ResponseEntity<ErrorMessage> handleNotUkCoordinatesException(NotUkCoordinatesException exception) {
+    @ExceptionHandler(LocationNotInUkException.class)
+    public ResponseEntity<ErrorMessage> handleNotUkCoordinatesException(LocationNotInUkException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);

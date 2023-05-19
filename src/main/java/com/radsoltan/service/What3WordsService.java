@@ -7,7 +7,7 @@ import com.radsoltan.dto.ReportSuggestionDTO;
 import com.radsoltan.exception.InvalidAddressFormatException;
 import com.radsoltan.exception.InvalidReportInformationException;
 import com.radsoltan.exception.MissingReportInfoException;
-import com.radsoltan.exception.NotUkCoordinatesException;
+import com.radsoltan.exception.LocationNotInUkException;
 import com.radsoltan.util.Constants;
 import com.radsoltan.util.Validation;
 import com.radsoltan.util.What3WordsApi;
@@ -42,11 +42,11 @@ public class What3WordsService {
      * @return filled and checked emergency report along with 3wa suggestions (if applicable)
      */
     public ReportDTO validateAndFillEmergencyReport(ReportInfoDTO info) {
-        ReportSuggestionDTO suggestions = new ReportSuggestionDTO();
-        if (!Validation.isValidReportInfo(info)) {
+        if (info == null || !Validation.isValidReportInfo(info)) {
             throw new MissingReportInfoException();
         }
 
+        ReportSuggestionDTO suggestions = new ReportSuggestionDTO();
         What3WordsV3 api = What3WordsApi.getInstance();
         Double latitude = info.getLatitude();
         Double longitude = info.getLongitude();
@@ -80,7 +80,7 @@ public class What3WordsService {
                 // Check if provided 3wa matches with the one from the response
                 throw new InvalidReportInformationException();
             } else if (!response.getCountry().equals(Constants.COUNTRY_GB)) {
-                throw new NotUkCoordinatesException();
+                throw new LocationNotInUkException();
             } else {
                 info.setThreeWordAddress(responseAddress);
             }
@@ -94,12 +94,27 @@ public class What3WordsService {
      * @param
      * @return
      */
-    public AddressDTO getWelshThreeWordAddressFromEnglish(AddressDTO englishAddressDTO) {
-        if (englishAddressDTO == null) {
+    public AddressDTO getTheeWordAddressForProvidedLanguage(AddressDTO addressDTO, String language) {
+        if (addressDTO == null) {
             throw new RuntimeException("Three word address must not be null.");
         }
-        String address = englishAddressDTO.getThreeWordAddress();
+        String address = addressDTO.getThreeWordAddress();
+        What3WordsV3 api = What3WordsApi.getInstance();
+        if (!Validation.validateThreeWordAddress(address)) {
+            throw new InvalidAddressFormatException();
+        }
+        ConvertToCoordinates coordinatesResponse = What3WordsApi.getCoordinatesBasedOnThreeWordAddress(api, address);
+        Coordinates coordinates = coordinatesResponse.getCoordinates();
+        if (coordinates == null) {
+            throw new RuntimeException("3wa not recognized");
+        }
+        if (!coordinatesResponse.getCountry().equals(Constants.COUNTRY_GB)) {
+            throw new LocationNotInUkException();
+        }
+        com.what3words.javawrapper.request.Coordinates requestCoordinates = new com.what3words.javawrapper.request.Coordinates(coordinates.getLat(), coordinates.getLng());
+        ConvertTo3WA response3WA = What3WordsApi.getThreeWordAddressBasedOnCoordinates(api, requestCoordinates, language);
+        addressDTO.setThreeWordAddress(response3WA.getWords());
 
-        return null;
+        return addressDTO;
     }
 }

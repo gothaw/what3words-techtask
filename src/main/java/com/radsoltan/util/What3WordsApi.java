@@ -10,7 +10,6 @@ import com.what3words.javawrapper.response.Suggestion;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class What3WordsApi {
     private static What3WordsV3 instance;

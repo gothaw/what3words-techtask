@@ -1,6 +1,7 @@
 package com.radsoltan.util;
 
 import com.radsoltan.dto.ReportInfoDTO;
+import com.radsoltan.exception.InvalidAddressFormatException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,11 +13,15 @@ public class Validation {
         if (address == null) {
             return false;
         }
-        // TODO: 19/05/2023 Throw an error if 3wa has invalid format i.e 3wa address supplied has invalid format
+
         Pattern pattern = Pattern.compile(THREE_WORD_ADDRESS_REGEX);
         Matcher matcher = pattern.matcher(address);
 
-        return matcher.find();
+        if (!matcher.find()) {
+            throw new InvalidAddressFormatException();
+        } else {
+            return true;
+        }
     }
 
     public static boolean isValidReportInfo(ReportInfoDTO reportInfo) {

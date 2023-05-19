@@ -145,6 +145,12 @@ Response:
     "3wa": "daring.lion.race"
 }
 ```
-Unit Test Coverage:
+### API Key:
+
+To configure the API paste the API key to:
+
+`src/main/java/com/radsoltan/config/Config.java`
+
+### Unit Test Coverage:
 
 ![img.png](img.png)

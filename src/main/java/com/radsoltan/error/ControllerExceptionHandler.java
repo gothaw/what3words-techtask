@@ -1,7 +1,9 @@
 package com.radsoltan.error;
 
 import com.radsoltan.exception.InvalidAddressFormatException;
+import com.radsoltan.exception.InvalidReportInformationException;
 import com.radsoltan.exception.MissingReportInfoException;
+import com.radsoltan.exception.NotUkCoordinatesException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +36,32 @@ public class ControllerExceptionHandler {
      */
     @ExceptionHandler(InvalidAddressFormatException.class)
     public ResponseEntity<ErrorMessage> handleUnableToRetrieveDataException(InvalidAddressFormatException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    /**
+     * Handles the exception when provided coordinates are not in the UK.
+     *
+     * @param exception NotUkCoordinatesException
+     * @return Bad request response with an error message
+     */
+    @ExceptionHandler(NotUkCoordinatesException.class)
+    public ResponseEntity<ErrorMessage> handleNotUkCoordinatesException(NotUkCoordinatesException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    /**
+     * Handles the exception when a report request includes both 3wa and coordinates, but they do not correspond to the same place.
+     *
+     * @param exception InvalidReportInformationException
+     * @return Bad request response with an error message
+     */
+    @ExceptionHandler(InvalidReportInformationException.class)
+    public ResponseEntity<ErrorMessage> handleInvalidReportInformationException(InvalidReportInformationException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);

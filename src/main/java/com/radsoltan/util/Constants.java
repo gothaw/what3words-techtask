@@ -7,6 +7,8 @@ public interface Constants {
     String MISSING_REPORT_INFO = "Provide report information either 3 word address or coordinates.";
     String THREE_WORD_ADDRESS_NOT_RECOGNIZED = "3wa not recognised: ";
     String INVALID_ADDRESS_FORMAT = "3wa address supplied has invalid format";
+    String NOT_UK_COORDINATES = "Provided coordinates are not in the UK";
+    String INVALID_REPORT_INFORMATION_REQUEST = "Invalid report information provided - 3wa and coordinates do not correspond to the same place.";
 
     String LANGUAGE_EN = "en";
 

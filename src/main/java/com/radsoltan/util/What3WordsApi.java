@@ -5,6 +5,8 @@ import com.what3words.javawrapper.What3WordsV3;
 import com.what3words.javawrapper.request.AutosuggestInputType;
 import com.what3words.javawrapper.request.AutosuggestRequest;
 import com.what3words.javawrapper.response.Autosuggest;
+import com.what3words.javawrapper.response.ConvertTo3WA;
+import com.what3words.javawrapper.response.ConvertToCoordinates;
 import com.what3words.javawrapper.response.Coordinates;
 import org.springframework.util.StringUtils;
 
@@ -70,12 +72,11 @@ public class What3WordsApi {
      *
      * @param api     Java wrapper of What3Words API
      * @param address 3wa address
-     * @return Coordinates
+     * @return Coordinates response
      */
-    public static Coordinates getCoordinatesBasedOnAddress(What3WordsV3 api, String address) {
+    public static ConvertToCoordinates getCoordinatesBasedOnThreeWordAddress(What3WordsV3 api, String address) {
         return api.convertToCoordinates(address)
-                .execute()
-                .getCoordinates();
+                .execute();
     }
 
     /**
@@ -84,12 +85,11 @@ public class What3WordsApi {
      * @param api         Java wrapper of What3Words API
      * @param coordinates Request coordinates
      * @param language    string representing language
-     * @return 3wa address
+     * @return 3wa address response
      */
-    public static String getAddressBasedOnCoordinates(What3WordsV3 api, com.what3words.javawrapper.request.Coordinates coordinates, String language) {
+    public static ConvertTo3WA getThreeWordAddressBasedOnCoordinates(What3WordsV3 api, com.what3words.javawrapper.request.Coordinates coordinates, String language) {
         return api.convertTo3wa(coordinates)
                 .language(language)
-                .execute()
-                .getWords();
+                .execute();
     }
 }

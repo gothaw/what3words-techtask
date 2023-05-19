@@ -56,19 +56,4 @@ public class Validation {
     public static boolean isReportInfoComplete(ReportInfoDTO reportInfo) {
         return reportInfo.getLatitude() != null && reportInfo.getLongitude() != null && validateThreeWordAddress(reportInfo.getThreeWordAddress());
     }
-
-    /**
-     * Checks if provided 3wa address is included in provided list of GB addresses.
-     *
-     * @param address 3wa address
-     * @param suggestionList list of GB addresses
-     * @return true if address is in the list
-     */
-    public static boolean isGbAddress(String address, List<Suggestion> suggestionList) {
-        return suggestionList
-                .stream()
-                .map(Suggestion::getWords)
-                .toList()
-                .contains(address);
-    }
 }

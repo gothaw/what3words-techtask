@@ -40,7 +40,7 @@ addresses from outside the UK. If the lat, lng somehow don't return a 3wa when t
 - If a 3wa is provided but doesn't meet the validation criteria, try using
 https://developer.what3words.com/public-api/docs#autosuggest if this does return
 results, return 3 suggestions in the error response
-- **NOTE from Rad: I also added a case to throw an error if both 3wa and lat + lng are provided, but they don't correspond to the same place on Earth.**
+- I also added a case to throw an error if both 3wa and lat + lng are provided, but they don't correspond to the same place on Earth.**
 
 #### Examples
 
